@@ -24,7 +24,7 @@
 #include "cpu_status.h"
 
 /* HLL Interrupt Handler Table */
-LOCAL UW hllint_tbl[sN_INTVEC];
+LOCAL UW hllint_tbl[N_INTVEC];
 
 /* ------------------------------------------------------------------------ */
 /*
@@ -70,7 +70,7 @@ EXPORT ER knl_define_inthdr( INT intno, ATR intatr, FP inthdr )
 		if ( (intatr & TA_HLNG) != 0 ) {
 			hllint_tbl[intno] = (UW)inthdr;
 			inthdr = knl_hll_inthdr;
-		}		
+		}
 	} else 	{	/* Clear interrupt handler */
 		inthdr = (FP)knl_exctbl_o[N_SYSVEC + intno];
 	}
