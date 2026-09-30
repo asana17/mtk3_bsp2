@@ -24,9 +24,21 @@
 
 /*
  * Switch to power-saving mode
+ *	The dispatcher calls this with BASEPRI masking the interrupts, and an interrupt
+ *	masked by BASEPRI does not wake WFI. So PRIMASK masks them instead while waiting.
+ *	Any interrupt then wakes WFI, and is taken once BASEPRI is cleared.
  */
 EXPORT void low_pow( void )
 {
+	UW	basepri;
+
+	basepri = get_basepri();
+	Asm("cpsid i");
+	set_basepri(0);
+	Asm("dsb");
+	Asm("wfi");
+	set_basepri(basepri);
+	Asm("cpsie i");
 }
 
 /*
